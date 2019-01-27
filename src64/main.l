@@ -3048,8 +3048,17 @@
    cc localtime(Tv)  # (Any) time to local time
    ld4 (A TM_GMTOFF)  # Time offset in seconds east of GMT
    ld E A
-   shl E 4  # Make short number
-   or E CNT
+   ld A (hex "80000000")
+   xor E A
+   sub E A
+   if ns
+     shl E 4  # Make short number
+     or E CNT
+   else
+     neg E
+     shl E 4
+     or E (| SIGN CNT)
+   end
    ret
 
 # (usec ['flg]) -> num
